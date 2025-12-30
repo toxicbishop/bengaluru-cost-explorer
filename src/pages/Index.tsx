@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Home, UtensilsCrossed, Car, Zap, Gamepad2, Search, Info, Mail, LogIn, LogOut, BarChart3, ArrowUpDown } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { CategoryCard } from "@/components/CategoryCard";
 import { CostItem } from "@/components/CostItem";
 import { AreaSelector } from "@/components/AreaSelector";
@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
-import { User, Session } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { CostCharts } from "@/components/CostCharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -43,23 +43,19 @@ const Index = () => {
   const [areas, setAreas] = useState<string[]>(["All Areas"]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [sortBy, setSortBy] = useState<string>("name");
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
+      (_event, session) => {
         setUser(session?.user ?? null);
       }
     );
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
       setUser(session?.user ?? null);
     });
 
@@ -73,29 +69,39 @@ const Index = () => {
   const fetchCostData = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (activeCategory !== "All") params.append("category", activeCategory);
-      if (selectedArea !== "All Areas") params.append("area", selectedArea);
-      if (searchTerm) params.append("search", searchTerm);
+      // ---------------------------------------------------------
+      // MOCK DATA (Simulates backend response)
+      // ---------------------------------------------------------
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cost-of-living?${params}`,
-        {
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-        }
-      );
+      const mockData: CostData[] = [
+        { id: "1", category: "Housing", item: "1BHK Apartment (City Centre)", minPrice: 15000, maxPrice: 25000, avgPrice: 20000, unit: "month", area: "Indiranagar" },
+        { id: "2", category: "Housing", item: "1BHK Apartment (Outside Centre)", minPrice: 8000, maxPrice: 15000, avgPrice: 11500, unit: "month", area: "Electronic City" },
+        { id: "3", category: "Food", item: "Basic Lunch (Business District)", minPrice: 150, maxPrice: 300, avgPrice: 225, unit: "meal", area: "Koramangala" },
+        { id: "4", category: "Food", item: "Milk (1 Liter)", minPrice: 42, maxPrice: 48, avgPrice: 45, unit: "liter", area: "All Areas" },
+        { id: "5", category: "Transportation", item: "Metro Ticket", minPrice: 10, maxPrice: 60, avgPrice: 35, unit: "trip", area: "All Areas" },
+        { id: "6", category: "Transportation", item: "Monthly Pass (Bus)", minPrice: 1000, maxPrice: 1500, avgPrice: 1250, unit: "month", area: "All Areas" },
+        { id: "7", category: "Utilities", item: "Basic Utilities (Electricity, Heating, Water)", minPrice: 1500, maxPrice: 3500, avgPrice: 2500, unit: "month", area: "All Areas" },
+        { id: "8", category: "Entertainment", item: "Cinema Ticket", minPrice: 250, maxPrice: 500, avgPrice: 350, unit: "ticket", area: "PVR" },
+      ];
 
-      if (!response.ok) throw new Error("Failed to fetch data");
-
-      const result = await response.json();
-      if (result.success) {
-        setCostData(result.data);
-        if (result.summary?.areas) {
-          setAreas(result.summary.areas);
-        }
+      // Filter data locally
+      let filtered = mockData;
+      if (activeCategory !== "All") {
+        filtered = filtered.filter((item) => item.category === activeCategory);
       }
+      if (searchTerm) {
+        filtered = filtered.filter((item) =>
+          item.item.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+
+      setCostData(filtered);
+      
+      // Update the areas dropdown
+      const uniqueAreas = Array.from(new Set(["All Areas", ...mockData.map((d) => d.area)]));
+      setAreas(uniqueAreas);
+
     } catch (error) {
       console.error("Error fetching cost data:", error);
       toast({
@@ -194,7 +200,7 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Hero Section with Gradient */}
+      {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 blur-3xl" />
         
