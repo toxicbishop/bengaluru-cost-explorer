@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Home, UtensilsCrossed, Car, Zap, Gamepad2, Search, Info, Mail, LogIn, LogOut, BarChart3, ArrowUpDown } from "lucide-react";
+import { Home, UtensilsCrossed, Car, Zap, Gamepad2, Search, Info, Mail, LogIn, LogOut, BarChart3, ArrowUpDown, Calculator } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CategoryCard } from "@/components/CategoryCard";
 import { CostItem } from "@/components/CostItem";
@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from '@supabase/supabase-js';
 import { CostCharts } from "@/components/CostCharts";
+import { BudgetCalculator } from "@/components/BudgetCalculator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -69,9 +70,6 @@ const Index = () => {
   const fetchCostData = async () => {
     setLoading(true);
     try {
-      // ---------------------------------------------------------
-      // MOCK DATA (Simulates backend response)
-      // ---------------------------------------------------------
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       const mockData: CostData[] = [
@@ -85,7 +83,6 @@ const Index = () => {
         { id: "8", category: "Entertainment", item: "Cinema Ticket", minPrice: 250, maxPrice: 500, avgPrice: 350, unit: "ticket", area: "PVR" },
       ];
 
-      // Filter data locally
       let filtered = mockData;
       if (activeCategory !== "All") {
         filtered = filtered.filter((item) => item.category === activeCategory);
@@ -97,8 +94,6 @@ const Index = () => {
       }
 
       setCostData(filtered);
-      
-      // Update the areas dropdown
       const uniqueAreas = Array.from(new Set(["All Areas", ...mockData.map((d) => d.area)]));
       setAreas(uniqueAreas);
 
@@ -212,7 +207,6 @@ const Index = () => {
             Bengaluru, India
           </p>
           
-          {/* Search Bar */}
           <div className="max-w-2xl mx-auto relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
             <Input
@@ -281,15 +275,19 @@ const Index = () => {
                 </SelectContent>
               </Select>
               <TabsList>
-              <TabsTrigger value="grid" className="gap-2">
-                <Home className="h-4 w-4" />
-                Grid View
-              </TabsTrigger>
-              <TabsTrigger value="charts" className="gap-2">
-                <BarChart3 className="h-4 w-4" />
-                Charts
-              </TabsTrigger>
-            </TabsList>
+                <TabsTrigger value="grid" className="gap-2">
+                  <Home className="h-4 w-4" />
+                  Grid View
+                </TabsTrigger>
+                <TabsTrigger value="charts" className="gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  Charts
+                </TabsTrigger>
+                <TabsTrigger value="budget" className="gap-2">
+                  <Calculator className="h-4 w-4" />
+                  Calculator
+                </TabsTrigger>
+              </TabsList>
             </div>
           </div>
 
@@ -335,6 +333,16 @@ const Index = () => {
             ) : (
               <CostCharts data={costData} />
             )}
+          </TabsContent>
+
+          <TabsContent value="budget">
+            <div className="mt-6">
+              <h3 className="text-2xl font-bold mb-4">Budget Planner</h3>
+              <p className="text-muted-foreground mb-8">
+                Estimate your monthly budget based on the average costs in Bengaluru.
+              </p>
+              <BudgetCalculator data={costData} />
+            </div>
           </TabsContent>
         </Tabs>
       </section>
