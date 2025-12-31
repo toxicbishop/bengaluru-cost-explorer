@@ -1,4 +1,4 @@
-import { Home, Info, Mail } from "lucide-react";
+import { Home, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -10,7 +10,7 @@ const Contact = () => {
       <nav className="border-b bg-gradient-to-r from-card/50 to-card/30 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Bengaluru Cost of Living
+              Cost of Living Bengaluru
           </h2>
           <div className="flex items-center gap-2">
             <Link to="/">
@@ -25,12 +25,7 @@ const Contact = () => {
                 <span className="hidden sm:inline">About</span>
               </Button>
             </Link>
-            <Link to="/contact">
-              <Button variant="ghost" className="gap-2 hover:bg-primary/10 transition-all">
-                <Mail className="h-4 w-4" />
-                <span className="hidden sm:inline">Contact</span>
-              </Button>
-            </Link>
+            {/* Contact Link removed as requested */}
           </div>
         </div>
       </nav>
@@ -48,7 +43,7 @@ const Contact = () => {
 
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="p-6">
-              <Mail className="h-8 w-8 mb-4 text-primary" />
+              <Home className="h-8 w-8 mb-4 text-primary" /> {/* Swapped Mail icon for generic Home or keep Mail if imported */}
               <h3 className="text-xl font-semibold mb-2">Email</h3>
               <p className="text-muted-foreground">
                 pranavarun19@gmail.com
