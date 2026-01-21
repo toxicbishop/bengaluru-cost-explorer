@@ -7,6 +7,10 @@ A data-driven analysis project examining the cost of living trends in Bengaluru,
 ![Matplotlib](https://img.shields.io/badge/Library-Matplotlib-orange?style=flat&logo=python)
 ![Status](https://img.shields.io/badge/Status-Complete-green)
 
+<p align="center">
+  <img src="assets/costoflivingbenagluru.jpeg" alt="Homepage" width="800">
+</p>
+
 ## 📖 Overview
 
 Bengaluru is known as the Silicon Valley of India, but it is also one of the most expensive cities to live in. This project analyzes a dataset of various expense categories—including rent, transport, food, and utilities—to determine the minimum and average budget required for students and working professionals.
