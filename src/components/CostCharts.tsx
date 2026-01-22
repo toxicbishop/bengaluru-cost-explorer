@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   BarChart,
   Bar,
@@ -37,7 +43,14 @@ interface CostChartsProps {
   data: CostData[];
 }
 
-const COLORS = ['#8b5cf6', '#ec4899', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+const COLORS = [
+  "#8b5cf6",
+  "#ec4899",
+  "#06b6d4",
+  "#10b981",
+  "#f59e0b",
+  "#ef4444",
+];
 
 export const CostCharts = ({ data }: CostChartsProps) => {
   // Aggregate data by category for various charts
@@ -53,8 +66,14 @@ export const CostCharts = ({ data }: CostChartsProps) => {
     }
     acc[item.category].totalAvg += item.avgPrice;
     acc[item.category].count += 1;
-    acc[item.category].minPrice = Math.min(acc[item.category].minPrice, item.minPrice);
-    acc[item.category].maxPrice = Math.max(acc[item.category].maxPrice, item.maxPrice);
+    acc[item.category].minPrice = Math.min(
+      acc[item.category].minPrice,
+      item.minPrice
+    );
+    acc[item.category].maxPrice = Math.max(
+      acc[item.category].maxPrice,
+      item.maxPrice
+    );
     return acc;
   }, {} as Record<string, any>);
 
@@ -98,7 +117,9 @@ export const CostCharts = ({ data }: CostChartsProps) => {
       <Card>
         <CardHeader>
           <CardTitle>Average Cost by Category</CardTitle>
-          <CardDescription>Compare average costs across different categories</CardDescription>
+          <CardDescription>
+            Compare average costs across different categories
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -106,15 +127,20 @@ export const CostCharts = ({ data }: CostChartsProps) => {
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
               <XAxis dataKey="name" className="text-xs" />
               <YAxis className="text-xs" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'hsl(var(--card))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px'
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
                 }}
               />
               <Legend />
-              <Bar dataKey="avgCost" fill="#8b5cf6" name="Average Cost (₹)" radius={[8, 8, 0, 0]} />
+              <Bar
+                dataKey="avgCost"
+                fill="#8b5cf6"
+                name="Average Cost (₹)"
+                radius={[8, 8, 0, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -140,15 +166,18 @@ export const CostCharts = ({ data }: CostChartsProps) => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {pieChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {pieChartData.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
                   }}
                 />
               </PieChart>
@@ -175,11 +204,11 @@ export const CostCharts = ({ data }: CostChartsProps) => {
                   fill="#8b5cf6"
                   fillOpacity={0.6}
                 />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
                   }}
                 />
               </RadarChart>
@@ -198,14 +227,25 @@ export const CostCharts = ({ data }: CostChartsProps) => {
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={topItems}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-              <XAxis dataKey="index" label={{ value: 'Rank', position: 'insideBottom', offset: -5 }} />
-              <YAxis label={{ value: 'Price (₹)', angle: -90, position: 'insideLeft' }} />
-              <Tooltip 
+              <XAxis
+                dataKey="index"
+                label={{ value: "Rank", position: "insideBottom", offset: -5 }}
+              />
+              <YAxis
+                label={{
+                  value: "Price (₹)",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+              />
+              <Tooltip
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
                       <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
-                        <p className="font-semibold">{payload[0].payload.name}</p>
+                        <p className="font-semibold">
+                          {payload[0].payload.name}
+                        </p>
                         <p className="text-primary">₹{payload[0].value}</p>
                       </div>
                     );
@@ -214,13 +254,13 @@ export const CostCharts = ({ data }: CostChartsProps) => {
                 }}
               />
               <Legend />
-              <Line 
-                type="monotone" 
-                dataKey="price" 
-                stroke="#ec4899" 
+              <Line
+                type="monotone"
+                dataKey="price"
+                stroke="#ec4899"
                 strokeWidth={3}
                 name="Price (₹)"
-                dot={{ fill: '#ec4899', r: 5 }}
+                dot={{ fill: "#ec4899", r: 5 }}
                 activeDot={{ r: 8 }}
               />
             </LineChart>
@@ -232,7 +272,9 @@ export const CostCharts = ({ data }: CostChartsProps) => {
       <Card>
         <CardHeader>
           <CardTitle>Price Range by Category</CardTitle>
-          <CardDescription>Min, max, and average prices across categories</CardDescription>
+          <CardDescription>
+            Min, max, and average prices across categories
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -240,38 +282,38 @@ export const CostCharts = ({ data }: CostChartsProps) => {
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
               <XAxis dataKey="name" className="text-xs" />
               <YAxis className="text-xs" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'hsl(var(--card))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px'
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
                 }}
               />
               <Legend />
-              <Area 
-                type="monotone" 
-                dataKey="max" 
-                stackId="1" 
-                stroke="#ef4444" 
-                fill="#ef4444" 
+              <Area
+                type="monotone"
+                dataKey="max"
+                stackId="1"
+                stroke="#ef4444"
+                fill="#ef4444"
                 fillOpacity={0.6}
                 name="Max Price"
               />
-              <Area 
-                type="monotone" 
-                dataKey="avg" 
-                stackId="2" 
-                stroke="#06b6d4" 
-                fill="#06b6d4" 
+              <Area
+                type="monotone"
+                dataKey="avg"
+                stackId="2"
+                stroke="#06b6d4"
+                fill="#06b6d4"
                 fillOpacity={0.6}
                 name="Avg Price"
               />
-              <Area 
-                type="monotone" 
-                dataKey="min" 
-                stackId="3" 
-                stroke="#10b981" 
-                fill="#10b981" 
+              <Area
+                type="monotone"
+                dataKey="min"
+                stackId="3"
+                stroke="#10b981"
+                fill="#10b981"
                 fillOpacity={0.6}
                 name="Min Price"
               />

@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Session } from '@supabase/supabase-js';
 import { z } from "zod";
+import { ArrowLeft } from "lucide-react";
 
 const authSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email address" }).max(255),
@@ -150,6 +151,16 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 p-4">
+      <div className="absolute top-4 left-4">
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/")}
+          className="gap-2 hover:bg-primary/10 transition-all"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Go Back
+        </Button>
+      </div>
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
